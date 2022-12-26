@@ -1,4 +1,8 @@
-﻿using System;
+﻿/// <summary>
+/// The library 
+/// </summary>
+
+using System;
 
 namespace BaseConverterLibrary
 {

@@ -1,8 +1,12 @@
-﻿using System;
-using System.Security.Permissions;
-using BaseConverterLibrary;
+﻿/// <summary>
+/// The program takes an integer in decimal, and a new base number system (from 2 to 20) 
+/// from the command line. Print the original number converted to this system to the console.
+/// </summary>
 
-namespace CalculatorProgram
+using System;
+using System.Security.Permissions;
+
+namespace BaseConverterProgram
 {
     class Program
     {
@@ -11,7 +15,6 @@ namespace CalculatorProgram
             bool endApp = false;
             Console.WriteLine("Console base converter on C#\r");
             Console.WriteLine("-----------\n");
-            BaseConverter bc = new BaseConverter();
             while (!endApp)
             {
                 string numInput1 = "";
@@ -39,7 +42,7 @@ namespace CalculatorProgram
                 }
                 try
                 {
-                    result = bc.ConvertBase(cleanNum1, cleanNum2);
+                    result = ConvertBase(cleanNum1, cleanNum2);
                     Console.WriteLine(numInput1 + " in base " + numInput2 + " is: " + result + "\n");
                 }
                 catch (Exception e)
@@ -55,6 +58,42 @@ namespace CalculatorProgram
                 Console.WriteLine("\n");
             }
             return;
+        }
+        public static string ConvertBase(int dec, int bas)
+        {
+            string output = "";
+            int div;
+            int rem;
+            char rem_ch;
+            if (bas > 36 ||
+                bas < 2)
+            {
+                output = "inappropriate base";
+                return output;
+            }
+            do
+            {
+                div = dec / bas;
+                rem = dec % bas;
+                if (rem >= 0 &&
+                    rem <= 9)
+                {
+                    rem_ch = Convert.ToChar(rem + 48);
+                }
+                else if (rem > 9 &&
+                    rem <= bas)
+                {
+                    rem_ch = Convert.ToChar(rem + 65 - 10);
+                }
+                else
+                {
+                    output = "conver error";
+                    return output;
+                }
+                output = rem_ch.ToString() + output;
+                dec = div;
+            } while (div > 0);
+            return output;
         }
     }
 }
