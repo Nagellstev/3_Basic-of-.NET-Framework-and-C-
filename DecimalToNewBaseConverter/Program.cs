@@ -8,31 +8,36 @@ using System.Security.Permissions;
 
 namespace BaseConverterProgram
 {
-    class Program
+    public class Program
     {
+
         public static void Main()
         {
             bool endApp = false;
+
             Console.WriteLine("Console base converter on C#\r");
             Console.WriteLine("-----------\n");
+
             while (!endApp)
             {
-                string numInput = "";
+                string numberInput = "";
                 string baseInput = "";
                 string result = "";
+                int cleanNumber = 0;
+                int cleanBase = 0;
 
                 Console.WriteLine("Type integer number, press Enter");
-                numInput = Console.ReadLine();
-                int cleanNum = 0;
-                while (!int.TryParse(numInput, out cleanNum))
+                numberInput = Console.ReadLine();
+
+                while (!int.TryParse(numberInput, out cleanNumber))
                 {
                     Console.WriteLine("Input integer number:");
-                    numInput = Console.ReadLine();
+                    numberInput = Console.ReadLine();
                 }
 
                 Console.WriteLine("Type new base of number (0 < base < 36), press Enter");
                 baseInput = Console.ReadLine();
-                int cleanBase = 0;
+
                 while (!int.TryParse(baseInput, out cleanBase) ||
                     cleanBase > 36 || 
                     cleanBase < 2)
@@ -40,60 +45,75 @@ namespace BaseConverterProgram
                     Console.WriteLine("Type new base of number (2 <= base <= 36):");
                     baseInput = Console.ReadLine();
                 }
+
                 try
                 {
-                    result = ConvertBase(cleanNum, cleanBase);
-                    Console.WriteLine($"{numInput} in base {baseInput} is: {result}\n");
+                    result = ConvertBase(cleanNumber, cleanBase);
+                    Console.WriteLine($"{numberInput} in base {baseInput} is: {result}\n");
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("Something Wrong!\n" + e.Message);
                 }
+
                 Console.WriteLine("----------------------\n");
                 Console.WriteLine("Press 'n' and 'Enter' to exit or other key to continue.\n");
+
                 if (Console.ReadLine() == "n")
                 {
                     endApp = true;
                 }
+
                 Console.WriteLine("\n");
             }
             return;
         }
 
-        public static string ConvertBase(int dec, int bas)
+        public static string ConvertBase(int numberInDecimalBase, int newBase)
         {
             string output = "";
-            int div;
-            int rem;
-            char rem_ch;
-            if (bas > 36 ||
-                bas < 2)
+            int quotient;
+            int reminder;
+            char reminderChar;
+            bool endLoop = true;
+
+            if (newBase > 36 ||
+                newBase < 2)
             {
                 output = "inappropriate base";
                 return output;
             }
-            do
+
+            while (endLoop)
             {
-                div = dec / bas;
-                rem = dec % bas;
-                if (rem >= 0 &&
-                    rem <= 9)
+                quotient = numberInDecimalBase / newBase;
+                reminder = numberInDecimalBase % newBase;
+
+                if (reminder >= 0 &&
+                    reminder <= 9)
                 {
-                    rem_ch = Convert.ToChar(rem + 48);
+                    reminderChar = Convert.ToChar(reminder + 48);
                 }
-                else if (rem > 9 &&
-                    rem <= bas)
+                else if (reminder > 9 &&
+                    reminder <= newBase)
                 {
-                    rem_ch = Convert.ToChar(rem + 65 - 10);
+                    reminderChar = Convert.ToChar(reminder + 65 - 10);
                 }
                 else
                 {
                     output = "conver error";
                     return output;
                 }
-                output = rem_ch.ToString() + output;
-                dec = div;
-            } while (div > 0);
+
+                output = reminderChar.ToString() + output;
+                numberInDecimalBase = quotient;
+
+                if (quotient <= 0)
+                {
+                    endLoop = false;
+                }
+            }
+
             return output;
         }
     }
